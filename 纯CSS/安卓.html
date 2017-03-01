@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>安卓</title>
+		<style type="text/css">
+			#box{
+				width: 800px;
+				height: 800px;
+				margin: 50px auto;
+				/*background: yellow;*/
+				position: relative;
+			}
+			#top{
+				/*background: black;*/
+				width:300px;
+				height: 200px;
+				overflow: hidden;
+				position: absolute;
+				top: 0px;
+				left: 250px;
+			}
+			#tou{
+				width: 300px;
+				height: 300px;
+				/*border-width: 300px;*/
+				border-radius: 50%;
+				background: rgb(149,185,52);
+				position: absolute;
+				top: 60px;
+				left: 0px;
+			}
+			.eye{
+				width: 25px;
+				height: 25px;
+				/*border-width: 300px;*/
+				border-radius: 50%;
+				background: white;
+				position: absolute;
+			}
+			#top:hover .eye{
+				background: red;
+			}
+			#top:hover #tianxian-left{
+				transform: rotate(20deg);
+			}
+			#top:hover #tianxian-right{
+				transform: rotate(-20deg);
+			}
+			#yan-left{
+				top: 125px;
+				left: 74px;
+			}
+			#yan-right{
+				top: 125px;
+				left: 200px;
+			}
+			.ear{
+				width: 6px;
+				height: 60px;
+				border-radius: 3px;
+				background: rgb(149,185,52);
+				position: absolute;
+				
+			}
+			#tianxian-left{
+				top: 20px;
+				left: 220px;
+				transform: rotate(30deg);
+			}
+			#tianxian-right{
+				top: 20px;
+				left: 70px;
+				transform: rotate(-30deg);
+			}
+			#center{
+				/*background: black;*/
+				width:500px;
+				height: 300px;
+				position: absolute;
+				top: 215px;
+				left: 150px;
+			}
+			#center:hover #gebo-left{
+				transform: rotate(180deg);
+			}
+			#center:hover #gebo-right{
+				transform: rotate(-20deg);
+			}
+			#duzi{
+				width: 300px;
+				height: 300px;
+				border-bottom-left-radius: 40px;
+				border-bottom-right-radius: 40px;
+				background: rgb(149,185,52);
+				position: absolute;
+				top: 0px;
+				left: 100px;
+			}
+			.gebo{
+				width: 65px;
+				height: 230px;
+				/*border-width: 300px;*/
+				border-top-left-radius: 40px;
+				border-top-right-radius: 40px;
+				border-bottom-left-radius: 40px;
+				border-bottom-right-radius: 40px;
+				background: rgb(149,185,52);
+				position: absolute;
+				transform-origin:center 0px;
+			}
+			#gebo-left{
+				left: 25px;
+			}
+			#gebo-right{
+				left: 410px;
+			}
+			#bottom{
+				/*background: black;*/
+				width:300px;
+				height: 200px;
+				overflow: hidden;
+				position: absolute;
+				top: 515px;
+				left: 250px;
+			}
+			.tui{
+				width: 65px;
+				height: 230px;
+				/*border-width: 300px;*/
+				border-top-left-radius: 40px;
+				border-top-right-radius: 40px;
+				border-bottom-left-radius: 40px;
+				border-bottom-right-radius: 40px;
+				background: rgb(149,185,52);
+				position: absolute;
+			}
+			#tui-left{
+				top: -90px;
+				left: 60px;
+				animation: zuotui 2s infinite linear;
+			}
+			@keyframes zuotui{
+				0%{top: -140px;}
+				50%{top: -90px;}
+				100%{top: -140px;}
+			}
+			#tui-right{
+				top: -90px;
+				left: 175px;
+				animation: youtui 2s infinite linear;
+			}
+			@keyframes youtui{
+				0%{top: -90px;}
+				50%{top: -140px;}
+				100%{top: -90px;}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<!--头-->
+			<div id="top">
+				<div id="tou"></div>
+				<div class="eye" id="yan-left"></div>
+				<div class="eye" id="yan-right"></div>
+				<div class="ear" id="tianxian-left"></div>
+				<div class="ear" id="tianxian-right"></div>
+			</div>
+			<!--中间-->
+			<div id="center">
+				<div id="duzi"></div>
+				<div class="gebo" id="gebo-left"></div>
+				<div class="gebo" id="gebo-right"></div>
+			</div>
+			<!--腿-->
+			<div id="bottom">
+				<div class="tui" id="tui-left"></div>
+				<div class="tui" id="tui-right"></div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>3D</title>
+		<style type="text/css">
+			#box{
+				/*开启界面的3d效果:*/
+				-webkit-transform-style:preserve-3d;
+				width: 200px;
+				height: 200px;
+				position: relative;
+				margin: 100px auto;
+				/*background: cyan ;*/
+				/*透明度*/
+				/*opacity: 0.3;*/
+				/*transform: rotateY(45deg) rotateX(45deg);*/
+				transform: rotateX(10deg) rotateY(10deg);
+				transition:all 60s;
+			}
+			#box:hover{
+				transform:rotateX(10800deg) rotateY(10800deg);
+				/*transform: rotateY(1000deg);*/
+				
+			}
+			/*#box div:hover*/
+			
+			#box div{
+				width: 200px;
+				height: 200px;
+				font-size: 50px;
+				line-height: 200px;
+				text-align: center;
+				color: white;
+				position: absolute;
+				opacity: 0.8;
+			}
+			#box>div:nth-child(1){
+				background-color: cyan;
+				transform: translateZ(100px);
+			}
+			#box>div:nth-child(2){
+				transform: rotateY(90deg) translateZ(100px);
+				background-color: yellow;
+			}
+			#box>div:nth-child(3){
+				transform: rotateX(90deg) translateZ(100px);
+				background-color: aquamarine;
+			}
+			#box>div:nth-child(4){
+				transform: rotateY(90deg) translateZ(-100px);
+				background-color: beige;
+			}
+			#box>div:nth-child(5){
+				transform: rotateX(90deg) translateZ(-100px);
+				background-color: coral;
+			}
+			#box>div:nth-child(6){
+				transform: translateZ(-100px);
+				background-color: darkmagenta;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<div>111</div>
+			<div>222</div>
+			<div>333</div>
+			<div>444</div>
+			<div>555</div>
+			<div>666</div>
+			
+		</div>
+	</body>
+</html>

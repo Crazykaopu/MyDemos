@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>打飞机游戏3.0</title>
+		<style type="text/css">
+			#huaban {
+				box-shadow: 0px 0px 10px 10px red;
+				margin: 50px;
+			}
+			
+			#loading {
+				position: relative;
+				top: -300px;
+				left: -220px;
+				z-index: 100;
+			}
+			
+			#kai {
+				width: 120px;
+				height: 50px;
+				position: relative;
+				top: -200px;
+				left: 160px;
+				z-index: 100;
+				background-color: cyan;
+				font-size: 30px;
+				text-align: center;
+				line-height: 50px;
+				display: none;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+
+	<body>
+		<canvas id="huaban" width="320" height="560"></canvas>
+		<img id="loading" src="../210161215/img/loading.gif" />
+		<div id="kai">开始游戏</div>
+	</body>
+	<script type="text/javascript">
+		//获取页面所有元素
+		var kaishibtn = document.getElementById("kai");
+		var loading = document.getElementById("loading");
+		//获取标签
+		var huaban = document.getElementById("huaban");
+		//获取画布
+		var huabu = huaban.getContext("2d");
+
+		var backgroundTop = 0;
+		var backgroundTop1 = -huaban.height;
+
+		var iskaishi = false;
+		var isloading = false;
+
+		//一:先加载游戏资源
+		var images = ["img/background.png", "img/bomb.png", "img/bullet1.png", "img/bullet2.png", "img/enemy1.png", "img/enemy3.png", "img/herofly.png", "img/prop.png", "img/enemy2.png"];
+		var n = 0;
+		for(var i = 0; i < images.length; i++) {
+			var img = new Image();
+			img.src = images[i];
+			img.onload = function() {
+				n++;
+				if(n / images.length > 0.9) {
+					isloading = true;
+					//					console.log(n);
+				}
+			}
+		}
+
+		//二:判断是否开始游戏
+		//（要放在计时器里面)
+		var quanju = setInterval(function() {
+			//清空画布
+			qingkonghuabu();
+
+			if(isloading) {
+				//创建背景
+				chuangjianbeijing();
+			}
+			if(iskaishi) {
+				//进入游戏
+				jinxingyouxi();
+				//创建其他资源
+
+			} else {
+				//加载内容:判断内容是否加载完成
+				if(isloading) {
+					//开始按钮显示
+					kaishibtn.style.display = "block";
+					//加载页面隐藏
+					loading.style.display = "none";
+				}
+			}
+		}, 100);
+
+		//三,资源加载完成,开始游戏（给开始游戏添加点击事件)
+		kaishibtn.onclick = function() {
+			iskaishi = true;
+			kaishibtn.style.display = "none";
+		}
+
+		//			创建游戏所用的所有图片资源
+		var background = new Image();
+		background.src = "img/background.png";
+		var background1 = new Image();
+		background1.src = "img/background.png";
+		var bomb = new Image();
+		bomb.src = "img/bomb.png";
+		var bullet1 = new Image();
+		bullet1.src = "img/bullet1.png";
+		var bullet2 = new Image();
+		bullet2.src = "img/bullet2.png";
+		var enemy1 = new Image();
+		enemy1.src = "img/enemy1.png";
+		var enemy3 = new Image();
+		enemy3.src = "img/enemy3.png";
+		var herofly = new Image();
+		herofly.src = "img/herofly.png";
+		var prop = new Image();
+		prop.src = "img/prop.png";
+		var enemy2 = new Image();
+		enemy2.src = "img/enemy2.png";
+		
+		var bulletImage = bullet1;
+		var bulletWidth = 6;
+		var bulletHeight = 14;
+		var juzhong = 31;
+
+		//创建背景
+		function chuangjianbeijing() {
+			backgroundTop += 4;
+			backgroundTop1 += 4;
+			if(backgroundTop >= huaban.height) {
+				backgroundTop = -huaban.height;
+			}
+			if(backgroundTop1 >= huaban.height) {
+				backgroundTop1 = -huaban.height;
+			}
+			huabu.drawImage(background, 0, backgroundTop, huaban.width, huaban.height);
+			huabu.drawImage(background, 0, backgroundTop1, huaban.width, huaban.height);
+		}
+
+		//清空画布
+		//			创建清空画布方法
+		function qingkonghuabu() {
+			huabu.clearRect(0, 0, 320, 560);
+		}
+		//游戏场景中各种对象的封装
+		//英雄
+		var hero = {
+			width: 66,
+			height: 82,
+			img: herofly,
+			x: 127,
+			y: 480,
+			zhuangtai: 0,
+			isdie: false,
+			speed: 10,
+			draw: function() {
+				if(this.isdie) {
+					//撞会
+				} else {
+					this.zhuangtai = this.zhuangtai ? 0 : 1;
+				}
+				huabu.drawImage(this.img, this.zhuangtai * 66, 0, this.width, this.height, this.x, this.y, this.width, this.height);
+			},
+			move: function() {
+				//左
+				if(this.left) {
+					this.x -= this.speed;
+				}
+				if(this.right) {
+					this.x += this.speed;
+				}
+				if(this.top) {
+					this.y -= this.speed;
+				}
+				if(this.bottom) {
+					this.y += this.speed;
+				}
+			}
+		};
+		//按键调用
+		//				document.onkeydown = function(event){
+		//					switch (event.keyCode){
+		//					case 39:
+		//						if(hero.feijiY < 251){
+		//							hero.feijiX += 10;
+		//						}
+		//						break;
+		//					case 37:
+		//						if(hero.feijiX > 5){
+		//							hero.feijiX = hero.feijiX-10;
+		//						}
+		//						break;
+		//					case 38:
+		//						if(hero.feijiY > 5){
+		//							hero.feijiY = hero.feijiY-10;
+		//						}
+		//						break;
+		//					case 40:
+		//						if(hero.feijiY < 494){
+		//							hero.feijiY = hero.feijiY+10;
+		//						}
+		//						break;
+		//					}	
+		//				}
+
+		//敌机
+		var enemys = [];
+		var enemy = function(type,img,width,height) {
+				this.width = width;
+				this.height = height;
+				this.type = type;
+				this.typeover = false;
+				this.img = img;
+				this.x = suijishu(0, 282);
+				this.y = -suijishu(34, 100);
+				this.zhuangtai = 0;
+				this.xiaoguo = false;
+				this.isdie = false;
+				this.speed = suijishu(2, 7);
+				this.draw = function() {
+					if(this.isdie == true){
+						this.zhuangtai++
+					}
+					if(this.zhuangtai == 5){
+						this.xiaoguo ==true;
+					}
+					huabu.drawImage(this.img, this.zhuangtai*this.width,0, this.width, this.height, this.x, this.y, this.width, this.height);
+				}
+				this.move = function() {
+					this.draw();
+					this.y += this.speed;
+				}
+			}
+			//子弹
+		var bullets = [];
+		var bullet = function(img, x, y,width,height) {
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			this.img = img;
+			this.speed = 12;
+			this.move = function() {
+				this.y -= this.speed;
+				huabu.drawImage(this.img, 0, 0, width, height, this.x, this.y, width, height);
+				//						开始move
+			};
+		}
+
+		var bt = 0;
+
+		function jinxingyouxi() {
+			//进行游戏
+			//画飞机
+			hero.draw();
+			hero.move();
+			//画子弹
+			//				console.log(hero);
+			bt++;
+			if(bt == 600){
+				bt =0;
+			}
+			if(bt % 3 == 0) {
+				var xxx = new bullet(bulletImage,hero.x +juzhong, hero.y,bulletWidth,bulletHeight);
+				bullets.push(xxx);
+			}
+			for(var i = 0; i < bullets.length; i++) {
+				bullets[i].move();
+
+			}
+			//检测界面中的所有的敌人和子弹
+			for(var i = 0; i < enemys.length; i++) {
+				for(var j = 0; j < bullets.length; j++) {
+					if(enemys[i].isdie == false) {
+						if(crash(enemys[i], bullets[j])&&enemys[i].type ==1) {
+							//i和j碰到一起同时消失
+							enemys[i].isdie = true;
+							bullets.splice(j, 1);
+							continue;
+						}
+					}
+					//子弹跑上去死亡
+					if(bullets[j].y < 0) {
+						bullets.splice(j, 1);
+						continue;
+					}
+				}
+				//敌人碰到hero
+				if(crash(hero,enemys[i])) {
+					if(enemys[i].type ==1){
+						//alert("game Over");
+					}
+					if(enemys[i].type ==2){
+						//碰到奖励
+						bulletImage = bullet2;
+						bulletWidth = 48;
+						bulletHeight = 14;
+						juzhong = 11;
+						enemys[i].xiaoguo = true;
+					}
+				}
+				enemys[i].move();
+				//敌人掉下去死亡
+				if(enemys[i].y > 560) {
+					if(enemys[i].type ==1||(enemys[i].type ==2&&xiaoguo)){
+						enemys.splice(i, 1);
+						i--;
+						continue;
+					}
+				}
+				//如果敌人是死亡状态，也要移除掉
+				if(enemys[i].xiaoguo == true) {
+					enemys.splice(i, 1);
+					i--;
+					continue;
+				}
+			}
+
+			//画敌人
+			if(enemys.length < 20) {
+				//					console.log(enemys.length);
+				var ra = suijishu(100, 150);
+				
+				if(ra < 110) {
+					var rn = suijishu(0,10);
+					if(rn<=1){
+						var xxx = new enemy(2,prop,39,68);
+						enemys.push(xxx);
+					}else{
+						var xxx = new enemy(1,enemy1,38,34);
+						enemys.push(xxx);
+					}
+					
+				}
+			}
+		}
+
+		//			建造一个控制范围的随机数
+		function suijishu(min, max) {
+			return parseInt(Math.random() * (max - min)) + min;
+		}
+		//获取元素ID 
+		function huoqufeijiid(obj) {
+			for(var i = 0; i < enemys.length; i++) {
+				if(obj == enemys[i]) {
+					return i;
+				}
+			}
+		}
+		//键盘监听事件
+		document.onkeydown = function(enent) {
+			switch(event.keyCode) {
+				case 37:
+					hero.left = true;
+					//						hero.top = false;
+					//						hero.right = false;
+					//						hero.bottom = false;
+					break;
+				case 38:
+					//						hero.left = false;
+					hero.top = true;
+					//						hero.right = false;
+					//						hero.bottom = false;
+					break;
+				case 39:
+					//						hero.left = false;
+					//						hero.top = false;
+					hero.right = true;
+					//						hero.bottom = false;
+					break;
+				case 40:
+					//						hero.left = false;
+					//						hero.top = false;
+					//						hero.right = false;
+					hero.bottom = true;
+					break;
+			}
+		}
+		document.onkeyup = function() {
+			hero.left = false;
+			hero.top = false;
+			hero.right = false;
+			hero.bottom = false;
+		}
+
+		//判断两个物体是否发生碰撞
+		function crash(b, a) {
+			var ar = a.x + a.width;
+			var al = a.x;
+			var at = a.y + a.height;
+			var ab = a.y;
+
+			var br = b.x + b.width;
+			var bl = b.x;
+			var bt = b.y;
+			var bb = b.y + b.height;
+			if(ar >= bl && al <= br && ab >= bt && at <= bb) {
+				//					console.log("碰到了");
+				return true;
+			} else {
+				//					console.log("没碰到");
+				return false;
+			}
+
+		}
+		//			console.log();
+		//			随机生成敌机:声明一个随机数再加一个判断,通过概率,随机的调用函数,从而生成随机的敌机;
+	</script>
+
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>瀑布流3.0</title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			body {
+				/*background-image: url(../res/73.jpg);*/
+				width: 100%;
+				background-attachment: fixed;
+				background-repeat: no-repeat;
+			}
+			
+			#main {
+				margin: 0 auto;
+				/*height: 1000px;*/
+				background-color: cyan;
+				position: relative;
+				/*overflow:hidden;*/
+			}
+			
+			.box {
+				padding: 20px 0px 0px 20px;
+				float: left;
+			}
+			
+			.pic {
+				padding: 10px;
+				background-color: rgba(255, 255, 255, 0.3);
+				border: 1px solid red;
+				border-radius: 5px;
+				box-shadow: 0 0 5px #ccc;
+			}
+			
+			.pic img {
+				width: 200px;
+				height: auto;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="main">
+		</div>
+	</body>
+	<script type="text/javascript">
+		//造个假数据
+		var images = [
+			"../res/1.jpg",
+			"../res/11.jpg",
+			"../res/111.jpg",
+			"../res/1111.jpg",
+			"../res/11111.jpg",
+			"../res/111111.jpg",
+			"../res/1111111.jpg",
+			"../res/11111111.jpg",
+			"../res/111111111.jpg",
+			"../res/1111111111.jpg",
+			"../res/2.jpg",
+			"../res/22.jpg",
+			"../res/222.jpg",
+			"../res/2222.jpg",
+			"../res/22222.jpg",
+			"../res/222222.jpg",
+			"../res/2222222.jpg",
+			"../res/22222222.jpg",
+			"../res/222222222.jpg",
+			"../res/2222222222.jpg",
+			"../res/3.jpg",
+			"../res/33.jpg",
+			"../res/333.jpg",
+			"../res/3333.jpg",
+			"../res/33333.jpg",
+			"../res/333333.jpg",
+			"../res/3333333.jpg",
+			"../res/33333333.jpg",
+			"../res/333333333.jpg",
+			"../res/3333333333.jpg",
+			"../res/4.jpg",
+			"../res/44.jpg",
+			"../res/444.jpg",
+			"../res/4444.jpg",
+			"../res/44444.jpg",
+			"../res/444444.jpg",
+			"../res/4444444.jpg",
+			"../res/44444444.jpg",
+			"../res/444444444.jpg",
+			"../res/4444444444.jpg",
+			"../res/5.jpg",
+			"../res/55.jpg",
+			"../res/555.jpg",
+			"../res/5555.jpg",
+			"../res/55555.jpg",
+			"../res/555555.jpg",
+			"../res/5555555.jpg",
+			"../res/55555555.jpg",
+			"../res/555555555.jpg",
+			"../res/5555555555.jpg",
+			"../res/6.jpg",
+			"../res/66.jpg",
+			"../res/666.jpg",
+			"../res/6666.jpg",
+			"../res/66666.jpg",
+			"../res/666666.jpg",
+			"../res/6666666.jpg",
+			"../res/66666666.jpg",
+			"../res/666666666.jpg",
+			"../res/6666666666.jpg",
+			"../res/7.jpg",
+			"../res/77.jpg",
+			"../res/777.jpg",
+			"../res/7777.jpg",
+			"../res/77777.jpg",
+			"../res/777777.jpg",
+			"../res/7777777.jpg",
+			"../res/77777777.jpg",
+			"../res/777777777.jpg",
+			"../res/7777777777.jpg",
+			"../res/8.jpg",
+			"../res/88.jpg",
+			"../res/888.jpg",
+			"../res/8888.jpg",
+			"../res/88888.jpg",
+			"../res/888888.jpg",
+			"../res/8888888.jpg",
+			"../res/88888888.jpg",
+			"../res/888888888.jpg",
+			"../res/8888888888.jpg",
+			"../res/9.jpg",
+			"../res/99.jpg",
+			"../res/999.jpg",
+			"../res/9999.jpg",
+			"../res/99999.jpg",
+			"../res/999999.jpg",
+			"../res/9999999.jpg",
+			"../res/99999999.jpg",
+			"../res/999999999.jpg",
+			"../res/9999999999.jpg",
+			"../res/0.jpg",
+			"../res/00.jpg",
+			"../res/000.jpg",
+			"../res/0000.jpg",
+			"../res/00000.jpg",
+			"../res/000000.jpg",
+			"../res/0000000.jpg",
+			"../res/00000000.jpg",
+			"../res/000000000.jpg",
+			"../res/0000000000.jpg",
+		];
+		
+		var main = document.getElementById("main");
+		function yuansu(narray) {
+			//遍历
+			for(var i = 0; i < narray.length; i++) {
+				var box = document.createElement("div");
+				box.className = "box";
+				var pic = document.createElement("div");
+				pic.className = "pic";
+				var img = document.createElement("img");
+				img.src = narray[i];
+				pic.appendChild(img);
+				box.appendChild(pic);
+				main.appendChild(box);
+			}
+		}
+		function abc() {
+			//设置宽度自适应
+			var zuixiaokuandu = document.body.clientWidth * 0.7;
+			if(zuixiaokuandu > 400) {
+				main.style.width = zuixiaokuandu + "px";
+			} else {
+				zuixiaokuandu = 400;
+			}
+			
+			
+			var box = document.getElementsByClassName("box");
+			var lieshu = parseInt(zuixiaokuandu / box[1].offsetWidth);
+			var shuzu = [];
+			//init data
+			for(var i = 0; i < box.length; i++) {
+				if(i < lieshu) {
+					shuzu.push(box[i].offsetHeight);
+				} else {
+					shuzubianhua(i);
+				}
+			}
+			//sort dives  
+			var b;
+			function shuzubianhua(s) {
+				var min = shuzu[0];
+				var xiabiao = 0;
+				for(var j = 1; j < shuzu.length; j++) {
+					if(shuzu[j] < min) {
+						min = shuzu[j];
+						xiabiao = j;
+					}
+				}
+				shuzu[xiabiao] += box[s].offsetHeight;
+				box[s].style.position = "absolute";
+				box[s].style.top = min + "px";
+				box[s].style.left = xiabiao * box[1].offsetWidth + "px";
+				b = min;
+			}
+//			console.log(b);
+			var a = Math.floor(box[box.length-1].offsetHeight/2);
+//			console.log(a);
+			
+			
+			return [a,b];
+		}
+		
+		yuansu(images);
+		window.onresize = function() {
+			//设置动态壁纸
+			var suijishu = Math.floor(Math.random()*74+2);
+			document.body.style.backgroundImage = "url(../res/" + suijishu +".jpg)";
+			abc();
+		}
+		window.onload = function() {
+			//设置动态壁纸
+			var suijishu = Math.floor(Math.random()*74+2);
+			document.body.style.backgroundImage = "url(../res/" + suijishu +".jpg)";
+			abc();
+		}
+		window.onscroll = function() {
+			jiance();
+			if(c){
+				yuansu(images);
+			}
+		}
+		//检测是否具备滚动条加载数据库的条件
+		var c = false;
+		function jiance (){
+			var gunchugaodu = document.body.scrollTop ||document.documentElement.scrollTop;
+			var pingmugaodu = document.documentElement.clientHeight ;
+			var bijiao = gunchugaodu+pingmugaodu;
+			var b = abc();
+			var bijiao2 = b[0]+b[1];
+			bijiao2<bijiao? c=true:c=false;
+		}
+		
+		
+	</script>
+
+</html> 

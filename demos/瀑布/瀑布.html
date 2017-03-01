@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>00</title>
+<meta charset="utf-8" />
+
+	<style type="text/css">
+	 *{
+	 	margin: 0;
+	 	padding: 0;
+	  } 
+	</style>
+</head>
+<body>
+	<canvas id="mycanvas"> 
+
+	<script type="text/javascript">
+	//获取屏幕尺寸
+		var winW;
+		var winH;
+		winW = window.screen.width;
+		winH = window.screen.height;
+		var canvas = document.getElementById("mycanvas");
+		canvas.width = winW;
+		canvas.height = winH;
+		var cxt = canvas.getContext("2d");
+		cxt.fillStyle = "black";
+		cxt.fillRect(0,0,winW,winH);
+
+	//确定屏幕出现字幕的栏数
+		var str = "袁翔";
+
+		//var str = "0123456789qwertyuiopasdfghjklzxcvbnm,./;'\[]QWERTYUIOP{}ASDFGHJHJKL:ZXCVBBNM<>?";
+		var fontSize = 14;
+		var clos = Math.floor(winW/fontSize);
+		
+	//初始化纵坐标
+		var array = new Array();
+		for (var i=0;i<clos;i++){
+			array.push(Math.random()*winH);
+		}
+	//画出字幕
+		function drawStr(){
+			cxt.fillStyle = "rgba(0,0,0,0.05)";//用于绘制渐变阴影
+			cxt.fillRect(0,0,winW,winH);
+			cxt.font = "800" + fontSize + "px";
+
+			//调用下面的函数，随机生成字体颜色
+			cxt.fillStyle = randomColor();
+
+			//cxt.fillStyle = 'green';
+			for (var i = 0; i < clos; i++){
+				var x = fontSize*i;
+				var y = array[i]*fontSize;
+		var indexStr = Math.floor(Math.random()*str.length);
+				
+				cxt.fillText(str[indexStr],x,y);
+				if(y>canvas.height && Math.random()>0.96){
+					array[i] = 0;
+				}
+				array[i]++;
+			}
+		}
+
+	//随机生成字体颜色
+		function randomColor(){
+			var R = Math.floor(Math.random()*255);
+			var G = Math.floor(Math.random()*255);
+			var B = Math.floor(Math.random()*255);
+			return "rgb"+"("+R+","+G+","+B+")";
+		}
+		
+	setInterval(drawStr,30);
+	
+	</script>
+</canvas>
+</body>
+</html>
